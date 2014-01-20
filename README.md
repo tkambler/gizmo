@@ -152,6 +152,14 @@ require(['path/to/component'], function(Widget) {
 });
 ```
 
+## Installation
+
+### Bower
+
+```
+$ bower install gizmo
+```
+
 ## License (MIT)
 
 ```
