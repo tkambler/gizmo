@@ -1,0 +1,31 @@
+{
+  "name": "gizmo",
+  "version": "1.0.0",
+  "homepage": "https://github.com/tkambler/gizmo",
+  "authors": [
+    "Tim Ambler <tkambler@gmail.com> (http://bitcubby.com)"
+  ],
+  "description": "A simple, but extendable platform for building reusable front-end components. Like JQuery's widget factory, sans jQuery.",
+  "main": "src/gizmo.js",
+  "keywords": [
+    "gizmo",
+    "widgets",
+    "front-end",
+    "components",
+    "loose",
+    "coupling",
+    "reusable",
+    "observable",
+    "pubsub",
+    "publish",
+    "subscribe"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
