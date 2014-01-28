@@ -1,12 +1,11 @@
-define([
-	'require',
-	'./lib/deferred',
-	'./lib/microevent',
-	'./lib/lodash.underscore',
-	'./lib/whenlive',
-	'./lib/utils',
-	'./lib/extend'
-], function(require, Deferred, MicroEvent, _, whenLive, utils, Class) {
+define(function(require) {
+
+	var Deferred = require('./lib/deferred'),
+		MicroEvent = require('./lib/microevent'),
+		_ = require('./lib/lodash.underscore'),
+		whenLive = require('./lib/whenlive'),
+		utils = require('./lib/utils'),
+		Class = require('./lib/extend');
 
 	var instances = [],
 		checkingInstances = false,

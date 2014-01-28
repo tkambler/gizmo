@@ -4,7 +4,7 @@
 
 > "It's like jQuery UI's 'Widget' factory - but without the need for jQuery."
 
-Gizmo is a simple, but extendable platform for building reusable front-end components. Gizmo is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget/) - but without the reliance on jQuery (or any other external libraries, for that matter).
+Gizmo is a simple, but extendable platform for building reusable front-end components. Gizmo is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget/) - but without the reliance on jQuery (or any other external libraries, for that matter). The library is designed to be used within a RequireJS environment.
 
 ## Core Functionality
 
@@ -158,6 +158,19 @@ require(['path/to/component'], function(Widget) {
 
 ```
 $ bower install gizmo
+```
+
+## Configuration
+
+Add the following options to your RequireJS configuration:
+
+```javascript
+'packages': [
+	{
+		'name': 'gizmo',
+		'location': 'path_to_gizmo_src'
+	}
+]
 ```
 
 ## License (MIT)
