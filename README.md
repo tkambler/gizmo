@@ -1,16 +1,16 @@
-# Gizmo
+# GizmoJS
 
-## What is Gizmo?
+## What is GizmoJS?
 
-> "It's like jQuery UI's 'Widget' factory - but without the need for jQuery."
+> "It's like jQuery UI's 'Widget' factory - but without the jQuery."
 
-Gizmo is a simple, but extendable platform for building reusable front-end components. Gizmo is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget/) - but without the reliance on jQuery (or any other external libraries, for that matter). The library is designed to be used within a RequireJS environment.
+GizmoJS is a simple, but extendable platform for building reusable front-end components. It is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget) - but without the reliance on jQuery, and with an emphasis on creating components as extendable "classes" as opposed to jQuery plugins. The only requirement is an AMD loaded (e.g. [RequireJS](http://requirejs.org)).
 
 ## Core Functionality
 
 ### Event Emitters
 
-All of the tools necessary for implementing the [observer pattern](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript) are baked in to Gizmo:
+All of the tools necessary for implementing the [observer pattern](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript) are baked in to GizmoJS:
 
 ```javascript
 var Truck = Gizmo.extend({
@@ -30,7 +30,7 @@ var Truck = Gizmo.extend({
 
 ### DOM State Notifications
 
-A Gizmo component will trigger a `ready` event when it is inserted into the DOM, and a `destroy` event when it is removed, enabling the developer to perform setup and teardown routines as needed and at the correct time.
+A GizmoJS component will trigger a `ready` event when it is inserted into the DOM, and a `destroy` event when it is removed, enabling the developer to perform setup and teardown routines as needed and at the correct time.
 
 ```javascript
 var Truck = Gizmo.extend({
@@ -51,7 +51,7 @@ var Truck = Gizmo.extend({
 
 ### Inheritance
 
-A Gizmo component can easily extend the functionality offered by an existing component by calling that component's `extend` method:
+A GizmoJS component can easily extend the functionality offered by an existing component by calling that component's `extend` method:
 
 ```javascript
 var Vehicle = Gizmo.extend({
@@ -79,9 +79,11 @@ var Truck = Vehicle.extend({
 });
 ```
 
-### Default Options
+### Specifying a Container & Options
 
-When creating a new instance of a Gizmo components, two arguments are passed: the ID of a container element and an (optional) options object, as shown below:
+When creating a new instance of a GizmoJS component, two arguments are passed: the ID of a container element (or the DOM element itself) and an (optional) options object, as shown below:
+
+#### Specifying a Container by ID
 
 ```javascript
 var truck = new Truck('container', {
@@ -90,7 +92,19 @@ var truck = new Truck('container', {
 });
 ```
 
-A Gizmo component has the ability to define default options as shown here:
+#### Specifying a Container by Element Reference
+
+```javascript
+var el = document.getElementById('container');
+var truck = new Truck(el, {
+	'color': 'blue',
+	'wheels': 4
+});
+```
+
+#### Default Options
+
+A GizmoJS component has the ability to define default options as shown here:
 
 ```javascript
 var Truck = Vehicle.extend({
@@ -103,9 +117,11 @@ var Truck = Vehicle.extend({
 
 ## Examples
 
-### Creating a New Gizmo Component
+### Creating a New GizmoJS Component
 
-In the following example, a RequireJS module is created in which we define a new Gizmo component. We "require" a template, which is passed to the component. In this example, we're using the RequireJS [text plugin](https://github.com/requirejs/text) -  but you could just as easily use something more sophisticated such as [Handlebars](https://github.com/SlexAxton/require-handlebars-plugin). We also require a stylesheet containing rules specific to this component. As a result, a developer needing to implement this component need only require a single module and instantiate it, as shown in the next example.
+In the following example, a RequireJS module is created in which we define a new GizmoJS component. We "require" a template, which is passed to the component. In this example, we're using the RequireJS [text plugin](https://github.com/requirejs/text) -  but you could just as easily use something more sophisticated such as [Handlebars](https://github.com/SlexAxton/require-handlebars-plugin). We also require a stylesheet containing rules specific to this component. As a result, a developer who is implementing this component need only require a single module and instantiate it - all related dependencies, including templates and stylesheets, are loaded on-demand.
+
+#### Full Example - Defining the Component
 
 ```javascript
 define([
@@ -139,16 +155,18 @@ define([
 });
 ```
 
-### Using a Gizmo Component
+#### Full Example - Using the Component
 
-With our Gizmo component now defined, we can use it as shown below:
+With our GizmoJS component now defined, we can use it as shown below:
 
 ```javascript
 require(['path/to/component'], function(Widget) {
+
     var widget = new Widget('containerID', {
 	    'option1': 'value1',
 	    'option2': 'value2'
     });
+    
 });
 ```
 
@@ -162,13 +180,14 @@ $ bower install gizmo
 
 ## Configuration
 
-Add the following options to your RequireJS configuration:
+Add the following options to your RequireJS configuration (adjust `location` as appropriate):
 
 ```javascript
 'packages': [
 	{
 		'name': 'gizmo',
-		'location': 'path_to_gizmo_src'
+		'location': '/gizmo/dist/',
+		'main': 'gizmo'
 	}
 ]
 ```

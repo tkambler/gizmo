@@ -1,4 +1,4 @@
-define(function(require) {
+define('gizmo', function(require) {
 
 	var Deferred = require('./lib/deferred'),
 		MicroEvent = require('./lib/microevent'),

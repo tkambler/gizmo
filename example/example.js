@@ -1,13 +1,3 @@
-requirejs.config({
-	'baseUrl': '/',
-	'packages': [
-		{
-			'name': 'gizmo',
-			'location': 'gizmo'
-		}
-	]
-});
-
 require(['./widget/widget'], function(Widget) {
 
 	var widget = new Widget('container', {

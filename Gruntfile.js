@@ -32,13 +32,23 @@ module.exports = function(grunt) {
             }
         },
 		'requirejs': {
-			'compile': {
+			'minified': {
 				'options': {
-				'baseUrl': ".",
-				// 'mainConfigFile': "path/to/config.js",
-				'name': "src/gizmo", // assumes a production build using almond
-				'out': "dist/gizmo.min.js"
-			}
+					'baseUrl': '.',
+					'name': 'gizmo',
+					'out': 'dist/gizmo.js',
+					'optimize': 'uglify',
+					'mainConfigFile': 'require.config.build.js'
+				}
+			},
+			'unminified': {
+				'options': {
+					'baseUrl': '.',
+					'name': 'gizmo',
+					'out': 'dist/gizmo.js',
+					'optimize': 'none',
+					'mainConfigFile': 'require.config.build.js'
+				}
 			}
 		}
     });
