@@ -5606,13 +5606,16 @@ define('gizmo', ['require','./lib/deferred','./lib/microevent','./lib/lodash.und
 			return;
 		}
 		checkingInstances = true;
-		_.each(instances, function(instance, idx) {
+		instances = _.map(instances, function(instance) {
 			if ( !instance._inDocument() ) {
-				instances.splice(idx, 1);
 				instance.trigger('destroy');
 				instance._destroy();
+				return null;
+			} else {
+				return instance;
 			}
 		});
+		instances = _.compact(instances);
 		checkingInstances = false;
 	};
 	checkInterval = setInterval(checkInstances, 1000);
