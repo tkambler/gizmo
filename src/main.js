@@ -50,15 +50,12 @@ define('gizmo', function(require) {
 				throw 'Container does not exist: ' + selector;
 			}
 
-			var templateLoaded = self._loadTemplate();
-
-			Deferred.when(templateLoaded).done(function(tpl) {
-				self.init.call(self);
-				whenLive(self.el, {
-					'visibility': true
-				}, function() {
-					self.trigger('ready');
-				});
+			self.init.call(self);
+			self._loadTemplate();
+			whenLive(self.el, {
+				'visibility': true
+			}, function() {
+				self.trigger('ready');
 			});
 
 			instances.push(this);
@@ -75,7 +72,7 @@ define('gizmo', function(require) {
 			var d = new Deferred();
 			var insertTemplate = function(tpl) {
 				if ( _.isFunction(tpl) ) {
-					tpl = tpl();
+					tpl = tpl.call(self);
 				}
 				self.el = self._createElement(tpl);
 				self.container.appendChild(self.el);

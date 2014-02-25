@@ -5,7 +5,9 @@ define([
 ], function(Gizmo, template, css) {
 
 	var Widget = Gizmo.extend({
-		'template': template,
+		'template': function() {
+			return template;
+		},
 		'init': function() {
 
 			console.log('Widget has initialized.');

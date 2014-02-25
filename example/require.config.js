@@ -3,8 +3,8 @@ requirejs.config({
 	'packages': [
 		{
 			'name': 'gizmo',
-			'location': 'gizmo',
-			'main': 'gizmo'
+			'location': 'src',
+			'main': 'main'
 		}
 	]
 });

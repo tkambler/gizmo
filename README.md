@@ -79,6 +79,27 @@ var Truck = Vehicle.extend({
 });
 ```
 
+### Template Management
+
+In the following example, a string is referenced by our component's `template` property.
+
+```javascript
+var truck = Vehicle.extend({
+	'template': "<div>My truck template.</div>"
+});
+```
+
+In the following example, we pass a function to our component's `template` property. The result will be used as our component's template. This is particularly useful if the template needs to be compiled via Handlebars, etc...
+
+```javascript
+var truck = Vehicle.extend({
+	'template': function() {
+		console.log(this.options); // Options are available here, if needed.
+		return "<div>My truck template.</div>"
+	}
+});
+```
+
 ### Specifying a Container & Options
 
 When creating a new instance of a GizmoJS component, two arguments are passed: the ID of a container element (or the DOM element itself) and an (optional) options object, as shown below:
