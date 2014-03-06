@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         },
         'express': {
             'options': {
-                'background': true
+                'background': false
             },
             'dev': {
                 'options': {

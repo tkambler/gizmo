@@ -5,6 +5,7 @@ define([
 ], function(Gizmo, template, css) {
 
 	var Widget = Gizmo.extend({
+		'attach': 'test',
 		'template': function() {
 			return template;
 		},

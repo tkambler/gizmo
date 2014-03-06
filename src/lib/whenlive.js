@@ -18,21 +18,75 @@ define([], function() {
 			container = document.documentElement;
 		}
 		for ( var ek in whenLiveElements ) {
-			if ( container.contains(whenLiveElements[ek]['elem']) || container === whenLiveElements[ek]['elem'] ) {
-				// The element exists within the DOM
-				if ( whenLiveElements[ek].options.visibility ) {
-					// User has requested that we also check for visibility.
-					if ( isVisible(whenLiveElements[ek]['elem']) ) {
-						// It's visible.
-						whenLiveElements[ek].fn.call(whenLiveElements[ek].elem);
-						whenLiveElements.splice(ek);
-					} else {
+			if (whenLiveElements[ek]['selector']) {
+				if (container.className.indexOf(whenLiveElements[ek]['selector']) >= 0) {
+					var attached = container.getAttribute('attached');
+					if (!attached) {
+						if ( whenLiveElements[ek].options.visibility && isVisible(container) ) {
+							container.setAttribute('attached', '1');
+							whenLiveElements[ek]['fn'](container);
+						} else {
+							container.setAttribute('attached', '1');
+							whenLiveElements[ek]['fn'](container);
+						}
 					}
 				} else {
-					whenLiveElements[ek].fn.call(whenLiveElements[ek].elem);
-					whenLiveElements.splice(ek);
+					var class_els = getElementsByClassName(container, whenLiveElements[ek]['selector']);
+					for (var i = 0; i< class_els.length; i++) {
+						var attached = class_els[i].getAttribute('attached');
+						if (!attached) {
+							if (whenLiveElements[ek].options.visibility) {
+								if (isVisible(class_els[i])) {
+									class_els[i].setAttribute('attached', '1');
+									whenLiveElements[ek]['fn'](class_els[i]);
+								}
+							} else {
+								class_els[i].setAttribute('attached', '1');
+								whenLiveElements[ek]['fn'](class_els[i]);
+							}
+						}
+					}
+				}
+			} else {
+				if ( container.contains(whenLiveElements[ek]['elem']) || container === whenLiveElements[ek]['elem'] ) {
+					// The element exists within the DOM
+					if ( whenLiveElements[ek].options.visibility ) {
+						// User has requested that we also check for visibility.
+						if ( isVisible(whenLiveElements[ek]['elem']) ) {
+							// It's visible.
+							whenLiveElements[ek].fn(whenLiveElements[ek].elem);
+							whenLiveElements.splice(ek);
+						} else {
+						}
+					} else {
+						whenLiveElements[ek].fn(whenLiveElements[ek].elem);
+						whenLiveElements.splice(ek);
+					}
 				}
 			}
+		}
+	};
+
+	var getElementsByClassName = function(node,classname) {
+		if (node.getElementsByClassName) { // use native implementation if available
+			return node.getElementsByClassName(classname);
+		} else {
+			return (function getElementsByClass(searchClass,node) {
+				if ( node == null ) {
+					node = document;
+					var classElements = [],
+					els = node.getElementsByTagName("*"),
+					elsLen = els.length,
+					pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)"), i, j;
+					for (i = 0, j = 0; i < elsLen; i++) {
+						if ( pattern.test(els[i].className) ) {
+							classElements[j] = els[i];
+						j++;
+						}
+					}
+				}
+				return classElements;
+			})(classname, node);
 		}
 	};
 
@@ -111,7 +165,34 @@ define([], function() {
 			return;
 		}
 
-		if ( document.documentElement.contains(el) ) {
+		if ( typeof el === 'string' ) {
+			var els = getElementsByClassName(document.body, el);
+			for (var i = 0; i < els.length; i++) {
+				var attached = els[i].getAttribute('attached');
+				if (!attached) {
+					if (options.visibility) {
+						if (isVisible(els[i])) {
+							els[i].setAttribute('attached', '1');
+							fn(els[i]);
+						}
+					} else {
+						els[i].setAttribute('attached', '1');
+						fn(els[i]);
+					}
+				}
+			}
+			whenLiveElements.push({
+				'elem': null,
+				'fn': fn,
+				'options': options,
+				'selector': el
+			});
+			if ( !MutationObserver ) {
+				if ( whenLiveElements.length === 1 ) {
+					requestAnimationFrame(whenLiveLoop);
+				}
+			}
+		} else if ( document.documentElement.contains(el) ) {
 			// The element exists within the DOM
 			if ( options.visibility ) {
 				if ( isVisible(el) ) {
@@ -120,7 +201,8 @@ define([], function() {
 					whenLiveElements.push({
 						'elem': el,
 						'fn': fn,
-						'options': options
+						'options': options,
+						'selector': null
 					});
 					if ( !MutationObserver ) {
 						if ( whenLiveElements.length === 1 ) {
@@ -136,7 +218,8 @@ define([], function() {
 			whenLiveElements.push({
 				'elem': el,
 				'fn': fn,
-				'options': options
+				'options': options,
+				'selector': null
 			});
 			if ( !MutationObserver ) {
 				if ( whenLiveElements.length === 1 ) {

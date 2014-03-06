@@ -4,7 +4,14 @@
 
 > "It's like jQuery UI's 'Widget' factory - but without the jQuery."
 
-GizmoJS is a simple, but extendable platform for building reusable front-end components. It is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget) - but without the reliance on jQuery, and with an emphasis on creating components as extendable "classes" as opposed to jQuery plugins. The only requirement is an AMD loaded (e.g. [RequireJS](http://requirejs.org)).
+GizmoJS is a simple, but extendable platform for building reusable front-end components. It is similar to jQuery UI's [Widget factory](http://jqueryui.com/widget) - but without the reliance on jQuery, and with an emphasis on creating components as extendable "classes" as opposed to jQuery plugins.
+
+GizmoJS also provides functionality similar to that of [AngularJS directives](http://docs.angularjs.org/guide/directive), without requiring you to commit to the full AngularJS stack. In other words, GizmoJS allows you to attach specific behavior to a specific DOM element (or all future elements of a specific type). [More information](#directives) on that can be found below.
+
+
+## Requirements
+
+* The only requirement is an AMD loader (e.g. [RequireJS](http://requirejs.org)).
 
 ## Core Functionality
 
@@ -120,6 +127,24 @@ var el = document.getElementById('container');
 var truck = new Truck(el, {
 	'color': 'blue',
 	'wheels': 4
+});
+```
+
+<a name="directives"></a>
+
+#### Attaching a GizmoJS Widget to All Future Elements with a Given Class
+
+In a manner similar to that of [AngularJS directives](http://docs.angularjs.org/guide/directive), GizmoJS allows you to specify that a widget should be instantiated and attached to all current and future DOM elements with a given class name:
+
+```javascript
+var Widget = Gizmo.extend({
+	'attach': 'widget',
+	'template': function() {
+		return '...';
+	},
+	'init': function() {
+		console.log('Widget has been instantiated and attached to element with class `widget`.');
+	}
 });
 ```
 

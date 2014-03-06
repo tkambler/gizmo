@@ -5,6 +5,7 @@ define('gizmo', function(require) {
 		_ = require('./lib/lodash.underscore'),
 		whenLive = require('./lib/whenlive'),
 		utils = require('./lib/utils'),
+		transfuse = require('./lib/transfuse'),
 		Class = require('./lib/extend');
 
 	var instances = [],
@@ -33,7 +34,7 @@ define('gizmo', function(require) {
 	MicroEvent.mixin(Class.prototype);
 
 	var Gizmo = Class.extend({
-		'initialize': function(selector, options) {
+		'initialize': function(selector, options, el) {
 
 			var self = this;
 
@@ -42,23 +43,35 @@ define('gizmo', function(require) {
 
 			_.defaults(self.options, self.defaults);
 
-			if ( selector.indexOf('#') === 0 ) {
-				selector = selector.substring(1);
+			if (this.attach && el) {
+				self.container = el;
+				self.init.call(self);
+				self._loadTemplate();
+				whenLive(el, {
+					'visibility': true
+				}, function() {
+					self.trigger('ready');
+				});
+				instances.push(this);
+			} else if (selector) {
+				if ( selector.indexOf('#') === 0 ) {
+					selector = selector.substring(1);
+				}
+				self.container = document.getElementById(selector);
+				if ( _.isNull(self.container) ) {
+					throw 'Container does not exist: ' + selector;
+				}
+				self.init.call(self);
+				self._loadTemplate();
+				whenLive(self.el, {
+					'visibility': true
+				}, function() {
+					self.trigger('ready');
+				});
+				instances.push(this);
+			} else {
+				throw 'A Gizmo class requires a value for either `selector` or `attach`.';
 			}
-			self.container = document.getElementById(selector);
-			if ( _.isNull(self.container) ) {
-				throw 'Container does not exist: ' + selector;
-			}
-
-			self.init.call(self);
-			self._loadTemplate();
-			whenLive(self.el, {
-				'visibility': true
-			}, function() {
-				self.trigger('ready');
-			});
-
-			instances.push(this);
 
 		},
 
@@ -106,6 +119,16 @@ define('gizmo', function(require) {
 		'init': function() {
 		}
 	});
+
+	Gizmo.onNewAttachment = function(selector, Class) {
+		whenLive(selector, {
+			'visibility': false
+		}, function(el) {
+			var instance = new Class(null, null, el);
+		});
+	};
+
+	transfuse.set('gizmo', Gizmo);
 
 	return Gizmo;
 

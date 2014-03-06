@@ -1,4 +1,6 @@
-define([], function() {
+define([
+	'./transfuse'
+], function(transfuse) {
 
 	/* Simple JavaScript Inheritance
 	 * By John Resig http://ejohn.org/
@@ -9,9 +11,11 @@ define([], function() {
 
 	  // The base Class implementation (does nothing)
 	  Class = function(){};
+	  Class.attachmentWatchers = [];
 
 	  // Create a new Class that inherits from this class
 	  Class.extend = function(prop) {
+
 		var _super = this.prototype;
 
 		// Instantiate a base class (but only create the instance,
@@ -59,6 +63,11 @@ define([], function() {
 
 		// And make this class extendable
 		Class.extend = arguments.callee;
+
+		if (prop.attach) {
+			var Gizmo = transfuse.get('gizmo');
+			Gizmo.onNewAttachment(prop.attach, Class);
+		}
 
 		return Class;
 	  };
